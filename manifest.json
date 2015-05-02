@@ -20,10 +20,11 @@
     "page": "options.html"
   },
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "*://www.google.com/*"
   ],
-  "web_accessible_resources": [
-    "jq.js",
-    "scripts.js"
-  ]
+  "content_scripts": [{
+    "matches": ["*://www.google.com/*"],
+    "js": ["jq.js","script.js"]
+  }]
 }
