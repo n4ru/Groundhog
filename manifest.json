@@ -1,0 +1,29 @@
+{
+  "update_url": "https://clients2.google.com/service/update2/crx",
+  "manifest_version": 2,
+  "name": "Groundhog",
+  "description": "Crowdsourced search results digging.",
+  "version": "1.0",
+  "icons": {
+    "16": "icon.png"
+  },
+  "page_action": {
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "run_at": "document_end",
+    "persistent": false
+  },
+  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html"
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "web_accessible_resources": [
+    "jq.js",
+    "scripts.js"
+  ]
+}
