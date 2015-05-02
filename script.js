@@ -1,9 +1,23 @@
+// Bind to new search
+console.log("We're loaded")
 $(".lsb").on('click', function() {
-	console..log("You clicked the search button")
+	console.log("You clicked the search button")
 });
+
+
 
 $(document).keypress(function(e) {
 	if (e.which == 13) {
-		alert('You 	pressed enter!');
+		alert('You pressed enter!');
 	}
+});
+
+// Add shit to each result.
+$(window).on('hashchange', function(e) {
+	$(document).on('DOMNodeInserted', function(event) {
+		if (event.target.innerHTML.indexOf('Search Results') === 23) {
+			$('.z').remove();
+			$('.g').append('<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>');
+		}
+	})
 });
