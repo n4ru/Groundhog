@@ -12,12 +12,14 @@ $(document).keypress(function(e) {
 	}
 });
 
-// Add shit to each result.
-$(window).on('hashchange', function(e) {
-	$(document).on('DOMNodeInserted', function(event) {
-		if (event.target.innerHTML.indexOf('Search Results') === 23) {
-			$('.z').remove();
-			$('.g').append('<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>');
-		}
-	})
-});
+$(document).ready(function() {
+	$('.g').append('<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>');
+})
+
+// Add shit to each result.	
+$(document).on('DOMNodeInserted', function(event) {
+	if (event.target.innerHTML.indexOf('Search Results') === 23) { // Find a faster way of finding this element.
+		$('.z').remove();
+		$('.g').append('<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>');
+	}
+})
