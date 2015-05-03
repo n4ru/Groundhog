@@ -80,6 +80,7 @@ function injectPayload() {
 			$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>")
 			console.dir(data);
 		});
+}
 
 function injectquerycomments() {
     $('#appbar').append(querycomments+featuredresults);
