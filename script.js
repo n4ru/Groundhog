@@ -52,6 +52,7 @@ function injectPayload() {
 
   $('.submitComment').click(function(e) {
     var text = $(this).siblings('input').val();
+    self = this;
     
     $.post(host + '/api/comments', {
       text: text,
@@ -61,6 +62,8 @@ function injectPayload() {
       resultUrl: $(this).parents('.rc').find('.r > a').attr('href')
 
     }, function(data) {
+    	$('#commented').remove();
+    	$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>")
       console.dir(data);
     });
   });
