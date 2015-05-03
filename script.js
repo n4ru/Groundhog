@@ -1,6 +1,12 @@
 var payload = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>';
 
-payload += '<div class="commentsBox"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
+payload += '<div class="commentsBox"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world. <span style="font-size: 200%;"> <a href="google.com"> &#8593; </a> <a href="google.com"> &#8595; </a> </p> </span> </div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
+
+var querycomments = '<div class="querycomments"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div>';
+var featuredresults = '<div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
+
+var upanddown = '<div> <div class="up"> <img style="height: 20px;" src="http://i.imgur.com/fI5pgx8.png"> <div class="down"> <br> <img style="height: 20px;" src="http://i.imgur.com/Oh4jt7R.png"> </div> </div>';
+
 
 // Bind to new search
 console.log("We're loaded")
@@ -38,7 +44,7 @@ function injectPayload() {
 		}
 		commentsOpen = 1;
 		if (commentsOpen) {
-			$('.commentsBox', this).stop(true, true).show("slide", { direction: "left"}, 2000 );
+			$('.commentsBox', this).stop(true, true).slideDown();
 		}
 	})
 	$('.rc').on('mouseleave', function(event) {
@@ -47,4 +53,23 @@ function injectPayload() {
 			closeComments(self)
 		//}, 1000)
 	})
+    injectquerycomments()
+    injectupanddown()
 }
+
+function injectquerycomments() {
+    $('#appbar').append(querycomments+featuredresults);
+    $('#rhs_block').css("display", "none");
+    console.log($('#rhs_block'))
+}
+
+function injectupanddown () {
+	$('.rc').append(upanddown);
+}
+
+
+$(function() {  
+$('.down').click(function(){
+    $(this).css('color', 'orange');
+  });
+});
