@@ -56,13 +56,14 @@ function injectPayload() {
 		if (commentsOpen) {
 			$('.commentsBox', this).stop(true, true).slideDown(300);
 		}
-	})
+	});
+
 	$('.rc').on('mouseleave', function(event) {
 		self = this;
 		//commentTimeout = setTimeout(function() {
-		closeComments(self)
+		closeComments(self);
 			//}, 1000)
-	})
+	});
 
 	$('.submitComment').click(function(e) {
 		var text = $(this).siblings('input').val();
@@ -74,13 +75,13 @@ function injectPayload() {
 			authorName: 'gordon',
 			query: $("#lst-ib").val(),
 			resultUrl: $(this).parents('.rc').find('.r > a').attr('href')
-
 		}, function(data) {
 			$('#commented').remove();
-			$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>")
+			$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>");
 			console.dir(data);
 		});
-}
+  });
+};
 
 function injectquerycomments() {
     $('#appbar').append(querycomments+featuredresults);
