@@ -25,10 +25,9 @@ $(document).on('DOMNodeInserted', function(event) {
 });
 
 function injectPayload() {
-  $('.g').append(payload);
-
-
-  $('.rc').on('mouseenter', function(event) { $('.commentsBox').slideDown();})
-  $('.rc').on('mouseleave', function(event) { $('.commentsBox').slideUp();})
+	$('.rc').on('mouseenter', function(event) {
+	})
+	$('.rc').on('mouseleave', function(event) {
+	})
 
 }
