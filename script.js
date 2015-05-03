@@ -3,7 +3,7 @@ var host = 'https://ghog.herokuapp.com'; // Bind to new search
 var querycomments = '<div class="querycomments"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div>';
 var featuredresults = '<div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
 */
-var upanddown = '<div> <div class="up"> <img style="height: 20px;" src="https://i.imgur.com/fI5pgx8.png"> <div class="down"> <br> <div class="score"> 1 </div> <img style="height: 20px;" src="https://i.imgur.com/Oh4jt7R.png"> </div> </div>';
+var upanddown = ' <div class="up"> <img style="height: 20px;" src="https://i.imgur.com/fI5pgx8.png"> <div class="down"> <br> <div class="score"> 1 </div> <img style="height: 20px;" src="https://i.imgur.com/Oh4jt7R.png"> </div> ';
 
 $(document).ready(injectPayload);
 
@@ -61,19 +61,20 @@ function SubmitThisShit(context, thisrc, thisbox) {
 	});
 }
 
-function voteOnShit(context, thisrc, thisbox, direction) {
+function voteOnShit(thisrc, direction) {
 	self = this;
 	if (direction == "up") {
 		directionNum = 1
 	} else {
 		directionNum = -1
 	}
+	console.log($('.r a', thisrc).attr("href"))
 	$.post(host + '/api/results/vote', {
 		direction: direction,
 		query: $("#lst-ib").val(),
 		url: $('.r a', thisrc).attr("href")
 	}, function(data) {
-		$('.score', self).text($('.score').text() + directionNum);
+		$('.score', self).text(parseInt($('.score')) + parseInt(directionNum));
 	});
 }
 
@@ -138,11 +139,11 @@ function injectquerycomments() {
 
 function injectupanddown() {
 	$('.rc').append(upanddown);
-}
+	$('.down').click(function() {
+		//voteOnShit(, "down")
+	});
 
-$('.down').click(function() {
-	//voteOnShit(, "down")
-});
-$('.up').click(function() {
-	$(this).css('color', 'orange');
-});
+	$('.up').click(function() {
+		voteOnShit($(this).parent(), "up");
+	});
+}
