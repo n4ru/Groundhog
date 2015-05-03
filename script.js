@@ -2,9 +2,7 @@ var payload = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>';
 
 payload += '<div class="commentsBox"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button class="submitComment">Submit</button> </div></div>';
 
-var host = 'https://ghog.herokuapp.com';
-
-// Bind to new search
+var host = 'https://ghog.herokuapp.com'; // Bind to new search
 console.log("We're loaded")
 $(".lsb").on('click', function() {
 	console.log("You clicked the search button")
@@ -31,6 +29,18 @@ function closeComments(thebox) {
 	$('.commentsBox', thebox).stop(true, true).slideUp(300);
 }
 
+function grabComments(query, resulturl) {
+	if (!resulturl) { // Get comments for the query
+		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22resulturl%22%20%3A%20%22%22%7D%7D', function(data) {
+			return data;
+		})
+	} else { // Get commments for the query AND resulturl
+		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22' + resulturl + '%22%20%3A%20%22%22%7D%7D', function(data) {
+			return data;
+		})
+	}
+}
+
 function injectPayload() {
 	$('.rc').append(payload);
 	$('.rc').on('mouseenter', function(event) {
@@ -46,25 +56,25 @@ function injectPayload() {
 	$('.rc').on('mouseleave', function(event) {
 		self = this;
 		//commentTimeout = setTimeout(function() {
-			closeComments(self)
-		//}, 1000)
+		closeComments(self)
+			//}, 1000)
 	})
 
-  $('.submitComment').click(function(e) {
-    var text = $(this).siblings('input').val();
-    self = this;
-    
-    $.post(host + '/api/comments', {
-      text: text,
-      vote: 0,
-      authorName: 'gordon',
-      query: $("#lst-ib").val(),
-      resultUrl: $(this).parents('.rc').find('.r > a').attr('href')
+	$('.submitComment').click(function(e) {
+		var text = $(this).siblings('input').val();
+		self = this;
 
-    }, function(data) {
-    	$('#commented').remove();
-    	$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>")
-      console.dir(data);
-    });
-  });
+		$.post(host + '/api/comments', {
+			text: text,
+			vote: 0,
+			authorName: 'gordon',
+			query: $("#lst-ib").val(),
+			resultUrl: $(this).parents('.rc').find('.r > a').attr('href')
+
+		}, function(data) {
+			$('#commented').remove();
+			$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>")
+			console.dir(data);
+		});
+	});
 }
