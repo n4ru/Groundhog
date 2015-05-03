@@ -2,6 +2,10 @@ var payload = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>';
 
 payload += '<div class="commentsBox"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button class="submitComment">Submit</button> </div></div>';
 
+var querycomments = '<div class="querycomments"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div>';
+var featuredresults = '<div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
+
+
 var host = 'https://ghog.herokuapp.com'; // Bind to new search
 console.log("We're loaded")
 $(".lsb").on('click', function() {
@@ -76,5 +80,7 @@ function injectPayload() {
 			$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>")
 			console.dir(data);
 		});
-	});
+
+function injectquerycomments() {
+    $('#appbar').append(querycomments+featuredresults);
 }
