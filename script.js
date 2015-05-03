@@ -90,36 +90,7 @@ function injectPayload() {
 
 	$('.rc').on('mouseleave', function(event) {
 		self = this;
-<<<<<<< HEAD
 		closeComments(self)
 	})
 
-}
-=======
-		//commentTimeout = setTimeout(function() {
-		closeComments(self);
-			//}, 1000)
-	});
-
-	$('.submitComment').click(function(e) {
-		var text = $(this).siblings('input').val();
-		self = this;
-
-		$.post(host + '/api/comments', {
-			text: text,
-			vote: 0,
-			authorName: 'gordon',
-			query: $("#lst-ib").val(),
-			resultUrl: $(this).parents('.rc').find('.r > a').attr('href')
-		}, function(data) {
-			$('#commented').remove();
-			$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>");
-			console.dir(data);
-		});
-  });
-};
->>>>>>> origin/master
-
-function injectquerycomments() {
-	//$('#appbar').append(querycomments);
 }
