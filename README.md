@@ -1,7 +1,13 @@
 
 ![Groundhog](http://i.imgur.com/QYPXwog.png)
 
-Get the most popular hearthstone decks with the click of a button!
+Groundhog is a crowdsourced search engine.  Think reddit for google.  Every search query becomes a discussion.  Others who have walked in your shoes, wondering the same things, can contribute their findings, their insights, their reactions.  Specific to your search.  
+
+Results are ranked by a combination of Google’s own Page Rank and user subitted votes.  Results have comments, which can be upvoted and downvoted.
+
+Searches can have comments.
+
+PageRank is algorithmically cool.  But it’s cold and impersonal.  We’re adding the human factor back to it.
 
 Features:
 =========
