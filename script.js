@@ -3,7 +3,7 @@ var host = 'https://ghog.herokuapp.com'; // Bind to new search
 var querycomments = '<div class="querycomments"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div>';
 var featuredresults = '<div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
 */
-var upanddown = '<div> <div class="up"> <img style="height: 20px;" src="http://i.imgur.com/fI5pgx8.png"> <div class="down"> <br> <div class="score"> 5 </div> <img style="height: 20px;" src="http://i.imgur.com/Oh4jt7R.png"> </div> </div>';
+var upanddown = '<div> <div class="up"> <img style="height: 20px;" src="https://i.imgur.com/fI5pgx8.png"> <div class="down"> <br> <div class="score"> 1 </div> <img style="height: 20px;" src="https://i.imgur.com/Oh4jt7R.png"> </div> </div>';
 
 $(document).ready(injectPayload);
 
@@ -22,28 +22,35 @@ function closeComments(thebox) {
 
 function grabComments(query, resulturl, cb) {
 	if (!resulturl) { // Get comments for the query
-		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22resulturl%22%20%3A%20%22%22%7D%7D', cb)
+		$.get(host + '/api/resultComments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22url%22%20%3A%20%22%22%7D%7D', cb)
 	} else { // Get commments for the query AND resulturl
-		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%22resultUrl%22%3A%22' + resulturl + '%22%7D%7D', cb)
+		$.get(host + '/api/resultComments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%22url%22%3A%22' + escape(resulturl) + '%22%7D%7D', cb)
 	}
+}
+
+function grabVotes(query, resulturl, cb) {
+	//console.log(host + '/api/results?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%22resultUrl%22%3A%22' + escape(resulturl) + '%22%7D%7D')
+	$.get(host + '/api/results?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%22url%22%3A%22' + escape(resulturl) + '%22%7D%7D', cb)
+		// NO comment support yet
 }
 
 function SubmitThisShit(context, thisrc, thisbox) {
 	var text = $(context).siblings('input').val();
 	self = this;
-	$.post(host + '/api/comments', {
-		text: text,
+	//console.log($('.r a', thisrc).attr("href"))
+	$.post(host + '/api/resultComments', {
+		comment: text,
 		vote: 0,
-		authorName: 'gordon',
 		query: $("#lst-ib").val(),
-		resultUrl: $('._Rm', thisrc).text()
+		timestamp: 0,
+		url: $('.r a', thisrc).attr("href")
 	}, function(data) {
 		$('#commented').remove();
 		$('.z', thisrc).remove();
-		grabComments($("#lst-ib").val(), $('._Rm', thisrc).text(), function(comments) {
+		grabComments($("#lst-ib").val(), $('.r a', thisrc).attr("href"), function(comments) {
 			commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
 			comments.forEach(function(comment) {
-				commentBox += '<p class="commentContent">' + comment["text"] + '</p>'
+				commentBox += '<p class="commentContent">' + comment["comment"] + '</p>'
 			})
 			commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
 			$(thisrc).append(commentBoxEnd);
@@ -51,6 +58,22 @@ function SubmitThisShit(context, thisrc, thisbox) {
 			$('.commentsBox', thisrc).append("<div id='commented'></br>Comment Submitted</div>").slideDown(0);
 			godFuckingDamnit(button, thisrc, commentBox);
 		})
+	});
+}
+
+function voteOnShit(context, thisrc, thisbox, direction) {
+	self = this;
+	if (direction == "up") {
+		directionNum = 1
+	} else {
+		directionNum = -1
+	}
+	$.post(host + '/api/results/vote', {
+		direction: direction,
+		query: $("#lst-ib").val(),
+		url: $('.r a', thisrc).attr("href")
+	}, function(data) {
+		$('.score', self).text($('.score').text() + directionNum);
 	});
 }
 
@@ -71,15 +94,22 @@ function injectPayload() {
 	len = $('.rc').length;
 	$('.rc').each(function(i, e) {
 		var self = this;
-		grabComments($("#lst-ib").val(), $('._Rm', this).text(), function(comments) {
+		grabComments($("#lst-ib").val(), $('.r a', this).attr("href"), function(comments) {
 			commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
 			comments.forEach(function(comment) {
-				commentBox += '<p class="commentContent">' + comment["text"] + '</p>'
+				commentBox += '<p class="commentContent">' + comment["comment"] + '</p>'
 			})
 			commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
 			$(self).append(commentBoxEnd);
 			var button = $('.submitComment', self);
 			godFuckingDamnit(button, self, commentBox);
+		})
+		grabVotes($("#lst-ib").val(), $('.r a', self).attr("href"), function(votes) {
+			if (votes.length == 1) {
+				$('.score', self).text(votes["vote"]);
+			} else {
+				$('.score', self).text("0");
+			}
 		})
 	});
 	$('.rc').on('mouseenter', function(event) {
@@ -110,7 +140,9 @@ function injectupanddown() {
 	$('.rc').append(upanddown);
 }
 
-
 $('.down').click(function() {
+	//voteOnShit(, "down")
+});
+$('.up').click(function() {
 	$(this).css('color', 'orange');
 });
