@@ -1,6 +1,8 @@
 var payload = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>';
 
-payload += '<div class="commentsBox"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
+payload += '<div class="commentsBox"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button class="submitComment">Submit</button> </div></div>';
+
+var host = 'https://ghog.herokuapp.com';
 
 // Bind to new search
 console.log("We're loaded")
@@ -47,4 +49,19 @@ function injectPayload() {
 			closeComments(self)
 		}, 1000)
 	})
+
+  $('.submitComment').click(function(e) {
+    var text = $(this).siblings('input').val();
+    
+    $.post(host + '/api/comments', {
+      text: text,
+      vote: 0,
+      authorName: 'gordon',
+      query: $("#lst-ib").val(),
+      resultUrl: $(this).parents('.rc').find('.r > a').attr('href')
+
+    }, function(data) {
+      console.dir(data);
+    });
+  });
 }
