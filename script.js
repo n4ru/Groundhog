@@ -1,11 +1,11 @@
 var payload = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>';
 
-payload += '<div class="commentsBox"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world. <span style="font-size: 200%;"> <a href="google.com"> &#8593; </a> <a href="google.com"> &#8595; </a> </p> </span> </div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
+payload += '<div class="commentsBox"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world. <span style="font-size: 200%;"> <a href="google.com"> &#8593; </p> </span> </div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
 
 var querycomments = '<div class="querycomments"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div>';
 var featuredresults = '<div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
 
-var upanddown = '<div> <div class="up"> <img style="height: 20px;" src="http://i.imgur.com/fI5pgx8.png"> <div class="down"> <br> <img style="height: 20px;" src="http://i.imgur.com/Oh4jt7R.png"> </div> </div>';
+var upanddown = '<div> <div class="up"> <img style="height: 20px;" src="http://i.imgur.com/fI5pgx8.png"> <div class="down"> <br> <div class="score"> 5 </div> <img style="height: 20px;" src="http://i.imgur.com/Oh4jt7R.png"> </div> </div>';
 
 
 // Bind to new search
