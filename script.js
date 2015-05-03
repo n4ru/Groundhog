@@ -24,10 +24,27 @@ $(document).on('DOMNodeInserted', function(event) {
 	}
 });
 
+function closeComments(thebox) {
+	commentsOpen = 0;
+	$('.commentsBox', thebox).stop(true, true).slideUp();
+}
+
 function injectPayload() {
+	$('.rc').append(payload);
 	$('.rc').on('mouseenter', function(event) {
+		if (typeof commentTimeout !== "undefined") {
+			closeComments(self);
+			clearTimeout(commentTimeout)
+		}
+		commentsOpen = 1;
+		if (commentsOpen) {
+			$('.commentsBox', this).stop(true, true).slideDown();
+		}
 	})
 	$('.rc').on('mouseleave', function(event) {
+		self = this;
+		commentTimeout = setTimeout(function() {
+			closeComments(self)
+		}, 1000)
 	})
-
 }
