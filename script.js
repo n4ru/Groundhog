@@ -1,10 +1,10 @@
 var host = 'https://ghog.herokuapp.com'; // Bind to new search
-/*
+
 var querycomments = '<div class="querycomments"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div>';
+/*
 var featuredresults = '<div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
 */
-var upanddown = ' <div class="up"> <img style="height: 20px;" src="https://i.imgur.com/fI5pgx8.png"> <div class="down"> <br> <div class="score"> 1 </div> <img style="height: 20px;" src="https://i.imgur.com/Oh4jt7R.png"> </div> ';
-
+var upanddown = '<div class="up"> <img style="height: 20px;" src="https://i.imgur.com/fI5pgx8.png"> </div>  <div class="score"> 1 </div> <div class="down"> <img style="height: 20px;" src="https://i.imgur.com/Oh4jt7R.png"> </div>';
 $(document).ready(injectPayload);
 
 // Add shit to each result.	
@@ -22,7 +22,7 @@ function closeComments(thebox) {
 
 function grabComments(query, resulturl, cb) {
 	if (!resulturl) { // Get comments for the query
-		$.get(host + '/api/resultComments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22url%22%20%3A%20%22%22%7D%7D', cb)
+		$.get(host + '/api/queryComments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22url%22%20%3A%20%22%22%7D%7D', cb)
 	} else { // Get commments for the query AND resulturl
 		$.get(host + '/api/resultComments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%22url%22%3A%22' + escape(resulturl) + '%22%7D%7D', cb)
 	}
@@ -38,27 +38,27 @@ function SubmitThisShit(context, thisrc, thisbox) {
 	var text = $(context).siblings('input').val();
 	self = this;
 	//console.log($('.r a', thisrc).attr("href"))
-	$.post(host + '/api/resultComments', {
-		comment: text,
-		vote: 0,
-		query: $("#lst-ib").val(),
-		timestamp: 0,
-		url: $('.r a', thisrc).attr("href")
-	}, function(data) {
-		$('#commented').remove();
-		$('.z', thisrc).remove();
-		grabComments($("#lst-ib").val(), $('.r a', thisrc).attr("href"), function(comments) {
-			commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
-			comments.forEach(function(comment) {
-				commentBox += '<p class="commentContent">' + comment["comment"] + '</p>'
+		$.post(host + '/api/resultComments', {
+			comment: text,
+			vote: 0,
+			query: $("#lst-ib").val(),
+			timestamp: 0,
+			url: $('.r a', thisrc).attr("href")
+		}, function(data) {
+			$('#commented').remove();
+			$('.z', thisrc).remove();
+			grabComments($("#lst-ib").val(), $('.r a', thisrc).attr("href"), function(comments) {
+				commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
+				comments.forEach(function(comment) {
+					commentBox += '<p class="commentContent">• ' + comment["comment"] + '</p>'
+				})
+				commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
+				$(thisrc).append(commentBoxEnd);
+				var button = $('.submitComment', thisrc);
+				$('.commentsBox', thisrc).append("<div id='commented'></br>Comment Submitted</div>").slideDown(0);
+				godFuckingDamnit(button, thisrc, commentBox);
 			})
-			commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
-			$(thisrc).append(commentBoxEnd);
-			var button = $('.submitComment', thisrc);
-			$('.commentsBox', thisrc).append("<div id='commented'></br>Comment Submitted</div>").slideDown(0);
-			godFuckingDamnit(button, thisrc, commentBox);
-		})
-	});
+		});
 }
 
 function voteOnShit(thisrc, direction) {
@@ -68,13 +68,13 @@ function voteOnShit(thisrc, direction) {
 	} else {
 		directionNum = -1
 	}
-	console.log($('.r a', thisrc).attr("href"))
 	$.post(host + '/api/results/vote', {
 		direction: direction,
 		query: $("#lst-ib").val(),
 		url: $('.r a', thisrc).attr("href")
 	}, function(data) {
-		$('.score', self).text(parseInt($('.score')) + parseInt(directionNum));
+		newNum = parseInt($('.score', thisrc).text()) + parseInt(directionNum)
+		$('.score', thisrc).text(newNum);
 	});
 }
 
@@ -82,7 +82,6 @@ function godFuckingDamnit(context, thisrc, thisbox) {
 	$(context).click(function(e) {
 		SubmitThisShit(context, thisrc, thisbox);
 	})
-
 	$(document).keyup(function(e) {
 		if ($(context).siblings("input:focus").length === 1 && (e.keyCode === 13)) {
 			SubmitThisShit(context, thisrc, thisbox);
@@ -98,7 +97,7 @@ function injectPayload() {
 		grabComments($("#lst-ib").val(), $('.r a', this).attr("href"), function(comments) {
 			commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
 			comments.forEach(function(comment) {
-				commentBox += '<p class="commentContent">' + comment["comment"] + '</p>'
+				commentBox += '<p class="commentContent"><ul>• ' + comment["comment"] + '</p>'
 			})
 			commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
 			$(self).append(commentBoxEnd);
@@ -107,7 +106,7 @@ function injectPayload() {
 		})
 		grabVotes($("#lst-ib").val(), $('.r a', self).attr("href"), function(votes) {
 			if (votes.length == 1) {
-				$('.score', self).text(votes["vote"]);
+				$('.score', self).text(votes[0]["vote"]);
 			} else {
 				$('.score', self).text("0");
 			}
@@ -124,23 +123,32 @@ function injectPayload() {
 	});
 
 	$('.rc').on('mouseleave', function(event) {
-			self = this;
-			closeComments(self)
-		})
-		//injectquerycomments()
+		self = this;
+		closeComments(self)
+	})
+	injectquerycomments()
 	injectupanddown()
 }
 
 function injectquerycomments() {
-	$('#appbar').append(querycomments + featuredresults);
+	//$('#appbar').append(querycomments);
 	$('#rhs_block').css("display", "none");
-	console.log($('#rhs_block'))
+	grabComments($("#lst-ib").val(), null, function(comments) {
+		commentBox = '<div class="z"><div class="querycomments">Query Comments Thread</br>'
+		comments.forEach(function(comment) {
+			commentBox += '<p class="commentContent">• ' + comment["comment"] + '</p>'
+		})
+		commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
+		$('#appbar').append(commentBoxEnd);
+		var button = $('#appbar .submitComment');
+		godFuckingDamnit(button, button, commentBox, true);
+	})
 }
 
 function injectupanddown() {
 	$('.rc').append(upanddown);
 	$('.down').click(function() {
-		//voteOnShit(, "down")
+		voteOnShit($(this).parent(), "down")
 	});
 
 	$('.up').click(function() {
