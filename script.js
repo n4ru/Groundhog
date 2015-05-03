@@ -1,10 +1,11 @@
-var payload = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>';
+var comments_skeleton = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>';
 
-payload += '<div class="commentsBox"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button class="submitComment">Submit</button> </div></div>';
+comments_skeleton += '<div class="commentsBox"> <div class="comment"><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentContent">foobar hello world.</p></div><div class="comment"><p class="commentContent">foobar hello world.</p></div></div>';
+
+comments_submit = '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div>'
 
 var querycomments = '<div class="querycomments"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div>';
 var featuredresults = '<div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
-
 
 var host = 'https://ghog.herokuapp.com'; // Bind to new search
 console.log("We're loaded")
@@ -33,24 +34,53 @@ function closeComments(thebox) {
 	$('.commentsBox', thebox).stop(true, true).slideUp(300);
 }
 
-function grabComments(query, resulturl) {
+function grabComments(query, resulturl, cb) {
 	if (!resulturl) { // Get comments for the query
-		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22resulturl%22%20%3A%20%22%22%7D%7D', function(data) {
-			return data;
-		})
+		console.log("Made a request without a URL")
+		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22resulturl%22%20%3A%20%22%22%7D%7D', cb)
 	} else { // Get commments for the query AND resulturl
-		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22' + resulturl + '%22%20%3A%20%22%22%7D%7D', function(data) {
-			return data;
-		})
+		console.log("Made a request with a URL")
+		console.log(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22' + resulturl + '%22%20%3A%20%22%22%7D%7D')
+		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%22resultUrl%22%3A%22' + resulturl + '%22%7D%7D', cb)
 	}
 }
 
+function godFuckingDamnit(context, thisrc) {
+	$(context).click(function(e) {
+		var text = $(context).siblings('input').val();
+		self = this;
+		$.post(host + '/api/comments', {
+			text: text,
+			vote: 0,
+			authorName: 'gordon',
+			query: $("#lst-ib").val(),
+			resultUrl: $('._Rm', thisrc).text()
+		}, function(data) {
+			$('#commented').remove();
+			$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>")
+		});
+	})
+}
+
 function injectPayload() {
-	$('.rc').append(payload);
+	len = $('.rc').length;
+	$('.rc').each(function(i, e) {
+		var self = this;
+		grabComments($("#lst-ib").val(), $('._Rm', this).text(), function(comments) {
+			console.log(comments)
+			commentBox = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div><div class="commentsBox">'
+			comments.forEach(function(comment) {
+				commentBox += '<p class="commentContent">' + comment["text"] + '</p>'
+			})
+			commentBox += '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div>'
+			$(self).append(commentBox);
+			var button = $('.submitComment', self);
+			godFuckingDamnit(button, self);
+		})
+	});
 	$('.rc').on('mouseenter', function(event) {
 		if (typeof commentTimeout !== "undefined") {
 			closeComments(self);
-			//clearTimeout(commentTimeout)
 		}
 		commentsOpen = 1;
 		if (commentsOpen) {
@@ -60,6 +90,12 @@ function injectPayload() {
 
 	$('.rc').on('mouseleave', function(event) {
 		self = this;
+<<<<<<< HEAD
+		closeComments(self)
+	})
+
+}
+=======
 		//commentTimeout = setTimeout(function() {
 		closeComments(self);
 			//}, 1000)
@@ -82,7 +118,8 @@ function injectPayload() {
 		});
   });
 };
+>>>>>>> origin/master
 
 function injectquerycomments() {
-    $('#appbar').append(querycomments+featuredresults);
+	//$('#appbar').append(querycomments);
 }
