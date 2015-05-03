@@ -1,23 +1,7 @@
-var comments_skeleton = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div>';
-
-comments_skeleton += '<div class="commentsBox"> <div class="comment"><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentContent">foobar hello world.</p></div><div class="comment"><p class="commentContent">foobar hello world.</p></div></div>';
-
-comments_submit = '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div>'
-
 var querycomments = '<div class="querycomments"> <div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div>';
 var featuredresults = '<div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="comment"> <p class="commentAuthor">Gordon</p><p class="commentContent">foobar hello world.</p></div><div class="commentForm"> <input> <button>Submit</button> </div></div>';
 
 var host = 'https://ghog.herokuapp.com'; // Bind to new search
-console.log("We're loaded")
-$(".lsb").on('click', function() {
-	console.log("You clicked the search button")
-});
-
-$(document).keypress(function(e) {
-	if (e.which == 13) {
-		alert('You pressed enter!');
-	}
-});
 
 $(document).ready(injectPayload);
 
@@ -36,16 +20,13 @@ function closeComments(thebox) {
 
 function grabComments(query, resulturl, cb) {
 	if (!resulturl) { // Get comments for the query
-		console.log("Made a request without a URL")
 		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22resulturl%22%20%3A%20%22%22%7D%7D', cb)
 	} else { // Get commments for the query AND resulturl
-		console.log("Made a request with a URL")
-		console.log(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%20%22' + resulturl + '%22%20%3A%20%22%22%7D%7D')
 		$.get(host + '/api/comments?filter=%7B%22where%22%3A%7B%22query%22%3A%22' + query + '%22%2C%22resultUrl%22%3A%22' + resulturl + '%22%7D%7D', cb)
 	}
 }
 
-function godFuckingDamnit(context, thisrc) {
+function godFuckingDamnit(context, thisrc, thisbox) {
 	$(context).click(function(e) {
 		var text = $(context).siblings('input').val();
 		self = this;
@@ -57,7 +38,19 @@ function godFuckingDamnit(context, thisrc) {
 			resultUrl: $('._Rm', thisrc).text()
 		}, function(data) {
 			$('#commented').remove();
-			$(self).parent('.commentForm').append("<div id='commented'></br>Comment Submitted</div>")
+			$('.z', thisrc).remove();
+			grabComments($("#lst-ib").val(), $('._Rm', thisrc).text(), function(comments) {
+				console.log(comments)
+				commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
+				comments.forEach(function(comment) {
+					commentBox += '<p class="commentContent">' + comment["text"] + '</p>'
+				})
+				commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
+				$(thisrc).append(commentBoxEnd);
+				var button = $('.submitComment', thisrc);
+				$('.commentsBox', thisrc).append("<div id='commented'></br>Comment Submitted</div>").slideDown(0);
+				godFuckingDamnit(button, thisrc, commentBox);
+			})
 		});
 	})
 }
@@ -67,15 +60,14 @@ function injectPayload() {
 	$('.rc').each(function(i, e) {
 		var self = this;
 		grabComments($("#lst-ib").val(), $('._Rm', this).text(), function(comments) {
-			console.log(comments)
-			commentBox = '<div class="z"><a href="about:blank"><b>1 Comment</b></a></div><div class="commentsBox">'
+			commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
 			comments.forEach(function(comment) {
 				commentBox += '<p class="commentContent">' + comment["text"] + '</p>'
 			})
-			commentBox += '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div>'
-			$(self).append(commentBox);
+			commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
+			$(self).append(commentBoxEnd);
 			var button = $('.submitComment', self);
-			godFuckingDamnit(button, self);
+			godFuckingDamnit(button, self, commentBox);
 		})
 	});
 	$('.rc').on('mouseenter', function(event) {
