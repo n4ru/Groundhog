@@ -39,7 +39,6 @@ function SubmitThisShit(context, thisrc, thisbox) {
 		$('#commented').remove();
 		$('.z', thisrc).remove();
 		grabComments($("#lst-ib").val(), $('._Rm', thisrc).text(), function(comments) {
-			console.log(comments)
 			commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
 			comments.forEach(function(comment) {
 				commentBox += '<p class="commentContent">' + comment["text"] + '</p>'
@@ -57,13 +56,13 @@ function godFuckingDamnit(context, thisrc, thisbox) {
 	$(context).click(function(e) {
 		SubmitThisShit(context, thisrc, thisbox);
 	})
-	/*
+	
 	$(document).keyup(function(e) {
-		if ($(context).siblings("input:focus") && (e.keyCode === 13)) {
+		if ($(context).siblings("input:focus").length === 1 && (e.keyCode === 13)) {
 			SubmitThisShit(context, thisrc, thisbox);	
 		}
 	})
-	*/
+
 }
 
 function injectPayload() {
