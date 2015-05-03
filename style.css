@@ -34,5 +34,10 @@
   position: absolute;
   width: 30px;
   left: 0px;
-  top: 15px;
+  top: 8px;
+}
+ 
+.score {
+  width: 20px;
+  text-align: center;
 }
