@@ -26,33 +26,44 @@ function grabComments(query, resulturl, cb) {
 	}
 }
 
+function SubmitThisShit(context, thisrc, thisbox) {
+	var text = $(context).siblings('input').val();
+	self = this;
+	$.post(host + '/api/comments', {
+		text: text,
+		vote: 0,
+		authorName: 'gordon',
+		query: $("#lst-ib").val(),
+		resultUrl: $('._Rm', thisrc).text()
+	}, function(data) {
+		$('#commented').remove();
+		$('.z', thisrc).remove();
+		grabComments($("#lst-ib").val(), $('._Rm', thisrc).text(), function(comments) {
+			console.log(comments)
+			commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
+			comments.forEach(function(comment) {
+				commentBox += '<p class="commentContent">' + comment["text"] + '</p>'
+			})
+			commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
+			$(thisrc).append(commentBoxEnd);
+			var button = $('.submitComment', thisrc);
+			$('.commentsBox', thisrc).append("<div id='commented'></br>Comment Submitted</div>").slideDown(0);
+			godFuckingDamnit(button, thisrc, commentBox);
+		})
+	});
+}
+
 function godFuckingDamnit(context, thisrc, thisbox) {
 	$(context).click(function(e) {
-		var text = $(context).siblings('input').val();
-		self = this;
-		$.post(host + '/api/comments', {
-			text: text,
-			vote: 0,
-			authorName: 'gordon',
-			query: $("#lst-ib").val(),
-			resultUrl: $('._Rm', thisrc).text()
-		}, function(data) {
-			$('#commented').remove();
-			$('.z', thisrc).remove();
-			grabComments($("#lst-ib").val(), $('._Rm', thisrc).text(), function(comments) {
-				console.log(comments)
-				commentBox = '<div class="z"><a href="#"><b>' + comments.length + ' Comment(s)</b></a><div class="commentsBox">'
-				comments.forEach(function(comment) {
-					commentBox += '<p class="commentContent">' + comment["text"] + '</p>'
-				})
-				commentBoxEnd = commentBox + '<div class="commentForm"> <input> <button class="submitComment">Submit</button></div></div></div></div>';
-				$(thisrc).append(commentBoxEnd);
-				var button = $('.submitComment', thisrc);
-				$('.commentsBox', thisrc).append("<div id='commented'></br>Comment Submitted</div>").slideDown(0);
-				godFuckingDamnit(button, thisrc, commentBox);
-			})
-		});
+		SubmitThisShit(context, thisrc, thisbox);
 	})
+	/*
+	$(document).keyup(function(e) {
+		if ($(context).siblings("input:focus") && (e.keyCode === 13)) {
+			SubmitThisShit(context, thisrc, thisbox);	
+		}
+	})
+	*/
 }
 
 function injectPayload() {
