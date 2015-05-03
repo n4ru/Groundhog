@@ -28,7 +28,7 @@ $(document).on('DOMNodeInserted', function(event) {
 
 function closeComments(thebox) {
 	commentsOpen = 0;
-	$('.commentsBox', thebox).stop(true, true).slideUp();
+	$('.commentsBox', thebox).stop(true, true).slideUp(300);
 }
 
 function injectPayload() {
@@ -36,18 +36,18 @@ function injectPayload() {
 	$('.rc').on('mouseenter', function(event) {
 		if (typeof commentTimeout !== "undefined") {
 			closeComments(self);
-			clearTimeout(commentTimeout)
+			//clearTimeout(commentTimeout)
 		}
 		commentsOpen = 1;
 		if (commentsOpen) {
-			$('.commentsBox', this).stop(true, true).slideDown();
+			$('.commentsBox', this).stop(true, true).slideDown(300);
 		}
 	})
 	$('.rc').on('mouseleave', function(event) {
 		self = this;
-		commentTimeout = setTimeout(function() {
+		//commentTimeout = setTimeout(function() {
 			closeComments(self)
-		}, 1000)
+		//}, 1000)
 	})
 
   $('.submitComment').click(function(e) {

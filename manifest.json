@@ -25,7 +25,7 @@
   ],
   "content_scripts": [{
     "matches": ["*://www.google.com/*"],
-    "js": ["jq.js","script.js"],
+    "js": ["jq.js","jqui.js", "script.js"],
     "css": ["style.css"]
   }]
 }
