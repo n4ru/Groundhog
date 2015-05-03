@@ -38,7 +38,7 @@ function injectPayload() {
 		}
 		commentsOpen = 1;
 		if (commentsOpen) {
-			$('.commentsBox', this).stop(true, true).slideDown(300);
+			$('.commentsBox', this).stop(true, true).show("slide", { direction: "left"}, 2000 );
 		}
 	})
 	$('.rc').on('mouseleave', function(event) {
