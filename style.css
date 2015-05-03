@@ -4,3 +4,35 @@
   box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
   padding: 10px;
 }
+
+.comment {
+  display: block;
+}
+
+.querycomments {
+  float: right;
+  -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+  z-index: 9;
+  margin-left: 700px;
+  position: absolute;
+  padding: 10px;
+  position: absolute;
+  right: 10%;
+  width: auto;
+  height: auto;
+  display: inline-block;
+}
+
+.up {
+  position: absolute;
+  width: 30px;
+  left: -50px;
+  top: 15px;
+}
+.down {
+  position: absolute;
+  width: 30px;
+  left: 0px;
+  top: 15px;
+}
